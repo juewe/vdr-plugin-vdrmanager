@@ -31,8 +31,18 @@ public class Timer extends Event implements Timerable {
 	private int flags;
 	private int priority;
 	private int lifetime;
+	private String searchtimer = "";	
 	private String weekdays = "-------";
 	private boolean conflict;
+
+	
+	public String getSearchtimer() {
+		return searchtimer;
+	}
+
+	public void setSearchtimer(String searchtimer) {
+		this.searchtimer = searchtimer;
+	}
 
 
 	public void setPriority(int priority) {
@@ -81,7 +91,17 @@ public class Timer extends Event implements Timerable {
 		// title and description
 		this.title = Utils.mapSpecialChars(values[8]);
 
+		this.searchtimer =  Utils.mapSpecialChars(values[9]);
+		if (this.searchtimer.split("<searchtimer>").length > 1){
+			if (this.searchtimer.split("<searchtimer>")[1].split("</searchtimer>")[0].trim().length()>0){
+				this.searchtimer = this.searchtimer.split("<searchtimer>")[1].split("</searchtimer>")[0];
+			} else
+				this.searchtimer = null;
+		}
+
+		
 		this.description = values.length > 9 ? values[9] : "";// aux
+		
 
 		// 10 and 11 are optional if there where event with this timer
 		this.shortText = values.length > 10 ? Utils.mapSpecialChars(values[10])
