@@ -12,6 +12,7 @@ public class EventFormatter {
 	private final String title;
 	private final String shortText;
 	private final String description;
+	
 
 	public EventFormatter(final Event event) {
 			this(event,false);
@@ -27,10 +28,22 @@ public class EventFormatter {
 		this.time = formatter.getTimeString();
 		formatter = new DateFormatter(event.getStop());
 		this.stop = formatter.getTimeString();
+		String searchTimer = "";
+
 		if(onlyStartTime == false){
 			this.time += " - " + stop;
 		}
-		this.title = Utils.mapSpecialChars(event.getTitle());
+		
+		if (event instanceof EventListItem){
+			if (((EventListItem)event).getEvent() instanceof Timer){
+				Timer timer = (Timer)((EventListItem)event).getEvent();
+				if (timer.getSearchtimer() != null && !timer.getSearchtimer().isEmpty())
+					searchTimer =  " - Searchtimer**" + timer.getSearchtimer();
+			}
+		}
+		
+		this.title = Utils.mapSpecialChars(event.getTitle()) +  searchTimer;
+		
 		this.shortText = Utils.mapSpecialChars(event.getShortText());
 		this.description = Utils.mapSpecialChars(event.getDescription());
 	}
